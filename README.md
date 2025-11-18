@@ -9,6 +9,7 @@
 ## What Is SQLCheck?
 
 
+
 `sqlcheck` automatically detects common SQL anti-patterns. Such anti-patterns often slow down queries. Addressing them will, therefore, help accelerate queries.
 
 `sqlcheck` targets **all major SQL dialects**.
