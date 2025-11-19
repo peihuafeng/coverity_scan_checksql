@@ -27,7 +27,7 @@ jobs:
           ## Use the parameter below to add comments for issues filtered 
           ## by impact. Default is High if unset
           ## NOTE: Issues matching coverity_policy_view are ignored if set
-          coverity_prComment_impacts: 'High,Medium,Low,Audit'
+          # coverity_prComment_impacts: 'High,Medium,Low,Audit'
           github_token: ${{ secrets.COVERITY_GITHUB_TOKEN }} # Required when PR comments is enabled
           
           ### Arbitrary product-related CL arguments
@@ -35,7 +35,7 @@ jobs:
           # coverity_clean_command: mvn clean
           # coverity_config_path: /Users/Config/coverity.yml
           # coverity_args: -c /Users/Config/coverity.yml -o capture.build.clean-command="mvn clean" -- mvn clean install
-        
+          coverity_args: '--enable-all'
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
         
           ### Coverity Connect users - Uncomment below
