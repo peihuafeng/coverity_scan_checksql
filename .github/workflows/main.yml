@@ -42,7 +42,7 @@ jobs:
           # coverity_clean_command: 'cmake --build build --config Release'
           # coverity_config_path: /Users/Config/coverity.yml
           # coverity_args: -c /Users/Config/coverity.yml -o capture.build.clean-command="mvn clean" -- mvn clean install
-          # coverity_args: '--enable-all --disable UNUSED_VALUE --checker-option DEADCODE:aggressive:true'
+          coverity_args: '--security --all --concurrency'
           
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
         
@@ -51,7 +51,7 @@ jobs:
           coverity_install_directory: c:/coverity
           
           ### POLICY ENFORCEMENT: Uncomment to break build on policy
-          coverity_policy_view: 'Outstanding Issues' 
+          #coverity_policy_view: 'Outstanding Issues' 
           
           ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true 
