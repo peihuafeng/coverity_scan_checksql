@@ -18,8 +18,8 @@ jobs:
           coverity_url: ${{ vars.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          coverity_project_name: project_pr
-          coverity_stream_name: stream_pr
+          coverity_project_name: sqlcheck
+          coverity_stream_name: sqlcheck
           # coverity_waitForScan: false   # Used to support the async mode
           
           ### PULL REQUEST COMMENTS:
@@ -43,7 +43,7 @@ jobs:
           coverity_install_directory: c:/coverity
           
           ### POLICY ENFORCEMENT: Uncomment to break build on policy
-          # coverity_policy_view: 'Outstanding Issues' 
+          coverity_policy_view: 'Outstanding Issues' 
           
           ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true 
