@@ -32,10 +32,11 @@ jobs:
           
           ### Arbitrary product-related CL arguments
           # coverity_build_command: mvn clean install
-          # coverity_clean_command: mvn clean
+          coverity_clean_command: 'cmake -B build -G "Visual Studio 17 2022" -A x64 && cmake --build build --config Release'
           # coverity_config_path: /Users/Config/coverity.yml
           # coverity_args: -c /Users/Config/coverity.yml -o capture.build.clean-command="mvn clean" -- mvn clean install
-          coverity_args: '--enable-all'
+          coverity_args: '--enable-all --disable UNUSED_VALUE --checker-option DEADCODE:aggressive:true'
+          
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
         
           ### Coverity Connect users - Uncomment below
