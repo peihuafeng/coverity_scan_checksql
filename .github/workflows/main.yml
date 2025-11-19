@@ -42,7 +42,7 @@ jobs:
           # coverity_clean_command: 'cmake --build build --config Release'
           # coverity_config_path: /Users/Config/coverity.yml
           # coverity_args: -c /Users/Config/coverity.yml -o capture.build.clean-command="mvn clean" -- mvn clean install
-          coverity_args: '--security --all --concurrency'
+          coverity_args: '-o analyze.security=true -o analyze.all=true -o analyze.concurrency=true'
           
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
         
