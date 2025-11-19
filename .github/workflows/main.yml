@@ -15,7 +15,12 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v4
         
+      - name: Clean build directory
+        shell: cmd
+        run: if exist build rmdir /s /q build
+      
       - name: Configure CMake
+        shell: cmd
         run: cmake -B build -G "Visual Studio 17 2022" -A x64
         
       - name: Coverity Scan
