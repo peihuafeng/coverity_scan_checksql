@@ -23,11 +23,11 @@ jobs:
           # coverity_waitForScan: false   # Used to support the async mode
           
           ### PULL REQUEST COMMENTS:
-          #coverity_prComment_enabled: true
+          coverity_prComment_enabled: true
           ## Use the parameter below to add comments for issues filtered 
           ## by impact. Default is High if unset
           ## NOTE: Issues matching coverity_policy_view are ignored if set
-          # coverity_prComment_impacts: 'High,Medium,Low,Audit'
+          coverity_prComment_impacts: 'High,Medium,Low,Audit'
           github_token: ${{ secrets.COVERITY_GITHUB_TOKEN }} # Required when PR comments is enabled
           
           ### Arbitrary product-related CL arguments
