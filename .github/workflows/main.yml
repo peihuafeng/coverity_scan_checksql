@@ -42,7 +42,7 @@ jobs:
           
           ### Arbitrary product-related CL arguments
           # coverity_build_command: mvn clean install
-          coverity_build_command: 'cmake --build build --config Release'
+          #coverity_build_command: 'cmake --build build --config Release'
           # coverity_clean_command: 'cmake --build build --config Release'
           # coverity_config_path: /Users/Config/coverity.yml
           coverity_config_path: c:/coverity/coverity.yaml
