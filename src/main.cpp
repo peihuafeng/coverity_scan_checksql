@@ -74,6 +74,8 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
     state.risk_level = (sqlcheck::RiskLevel) FLAGS_risk_level;
   }
 
+
+  
   char *test1;
   strcpy(test1, "aaaa");
   // Run validators
