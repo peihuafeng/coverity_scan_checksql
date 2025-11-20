@@ -78,6 +78,7 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
 
  
 
+
   
   char *test1;
   strcpy(test1, "aaaa");
