@@ -74,8 +74,8 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
     state.risk_level = (sqlcheck::RiskLevel) FLAGS_risk_level;
   }
 
-  char *test1 = nullptr;
-  strcpy(test1, "aaaa");
+  char *test = nullptr;
+  strcpy(test, "aaaa");
   // Run validators
   std::cout << "+-------------------------------------------------+\n"
             << "|                   SQLCHECK                      |\n"
@@ -107,12 +107,9 @@ void Usage() {
 
 int main(int argc, char **argv) {
 
+  bool has_issues = false;
+
   try {
-
-
-
-
-
 
     // Parse the input arguments from the user
     gflags::SetUsageMessage("");
