@@ -74,6 +74,8 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
     state.risk_level = (sqlcheck::RiskLevel) FLAGS_risk_level;
   }
 
+  char *test = nullptr;
+  strcpy(test, "aaaa");
   // Run validators
   std::cout << "+-------------------------------------------------+\n"
             << "|                   SQLCHECK                      |\n"
