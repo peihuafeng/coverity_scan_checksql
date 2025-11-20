@@ -107,11 +107,6 @@ void Usage() {
 
 int main(int argc, char **argv) {
 
-  bool has_issues = false;
-  char* test = new char[10];
-  delete []test;
-  strcpy(test, "aaaa");
-
   try {
 
     // Parse the input arguments from the user
