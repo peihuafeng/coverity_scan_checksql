@@ -99,6 +99,8 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
 }
 
 
+
+
 void Usage() {
   std::cout <<
       "Command line options : sqlcheck <options>\n"
