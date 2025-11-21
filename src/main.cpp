@@ -42,6 +42,8 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
 
 
 
+  
+
 
   // Default Values
   state.risk_level = sqlcheck::RISK_LEVEL_ALL;
