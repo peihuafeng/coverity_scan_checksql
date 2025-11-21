@@ -36,13 +36,6 @@ DEFINE_string(file_name, "", "SQL file name"); // standard input
 
 void ConfigureChecker(sqlcheck::Configuration &state) {
 
-  char* test = new char[10];
-  delete []test;
-  strcpy(test, "aaaa");
-
-
-
-
   // Default Values
   state.risk_level = sqlcheck::RISK_LEVEL_ALL;
   state.file_name = "";
@@ -75,14 +68,6 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
   }
 
 
-
- 
-
-
-
-
-  char *test1;
-  strcpy(test1, "aaaa");
   // Run validators
   std::cout << "+-------------------------------------------------+\n"
             << "|                   SQLCHECK                      |\n"
@@ -99,17 +84,7 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
 }
 
 
-
-
-
-
 void Usage() {
-
-  char* test = new char[10];
-  delete []test;
-  strcpy(test, "aaaa");
-
-
   std::cout <<
       "Command line options : sqlcheck <options>\n"
       "   -f -file_name          :  SQL file name\n"

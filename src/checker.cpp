@@ -22,7 +22,7 @@ namespace sqlcheck {
 
 bool Check(Configuration& state) {
 
-    
+
 
   bool has_issues = false;
   std::unique_ptr<std::istream> input;
@@ -38,10 +38,6 @@ bool Check(Configuration& state) {
     //std::cout << "Checking " << state.file_name << "...\n";
     input.reset(new std::ifstream(state.file_name.c_str()));
   }
-  
-  char* test = new char[10];
-  delete []test;
-  strcpy(test, "aaaa");  
 
   std::stringstream sql_statement;
   state.line_number = 1;
