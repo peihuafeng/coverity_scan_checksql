@@ -24,6 +24,8 @@ bool Check(Configuration& state) {
 
 
 
+    
+
   bool has_issues = false;
   std::unique_ptr<std::istream> input;
 

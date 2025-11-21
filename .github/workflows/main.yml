@@ -10,7 +10,7 @@ on:
 
 
 jobs:
-  build:
+  Coverity-Scan:
     runs-on: [ self-hosted ]
     env:
       # 传递给 cov-analyze 的参数
