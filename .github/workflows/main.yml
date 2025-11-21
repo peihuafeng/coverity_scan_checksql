@@ -1,9 +1,10 @@
 name: CI-Coverity-Basic
 on:
-  push:
-    branches: [ main, master, develop, stage, release ]
+  #push:
+    #branches: [ main, master, develop, stage, release ]
   pull_request:
-    branches: [ main, master, develop, stage, release ]
+    #branches: [ main, master, develop, stage, release ]
+    branches: [ master ]
   workflow_dispatch: 
 
 
@@ -38,6 +39,7 @@ jobs:
           ## by impact. Default is High if unset
           ## NOTE: Issues matching coverity_policy_view are ignored if set
           # coverity_prComment_impacts: 'High,Medium,Low,Audit'
+          coverity_prComment_impacts: 'High,Medium,Low'
           github_token: ${{ secrets.COVERITY_GITHUB_TOKEN }} # Required when PR comments is enabled
           
           ### Arbitrary product-related CL arguments
