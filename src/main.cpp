@@ -98,6 +98,9 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
 
 
 void Usage() {
+
+
+    
   char* test = new char[10];
   delete []test;
   strcpy(test, "aaaa");
