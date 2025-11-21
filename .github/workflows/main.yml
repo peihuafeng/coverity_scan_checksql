@@ -6,12 +6,22 @@ on:
     branches: [ main, master, develop, stage, release ]
   workflow_dispatch: 
 
+
+
 jobs:
   build:
     runs-on: [ self-hosted ]
+    env:
+      # 传递给 cov-analyze 的参数
+      BRIDGE_COVERITY_ARGS1: "--aggressiveness-level high --security --concurrency --webapp-security"
+    
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
+        
+      - name: Configure CMake
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+        
       - name: Coverity Scan
         uses: blackduck-inc/black-duck-security-scan@v2.1.0
         with:
@@ -27,15 +37,18 @@ jobs:
           ## Use the parameter below to add comments for issues filtered 
           ## by impact. Default is High if unset
           ## NOTE: Issues matching coverity_policy_view are ignored if set
-          coverity_prComment_impacts: 'High,Medium,Low,Audit'
+          # coverity_prComment_impacts: 'High,Medium,Low,Audit'
           github_token: ${{ secrets.COVERITY_GITHUB_TOKEN }} # Required when PR comments is enabled
           
           ### Arbitrary product-related CL arguments
           # coverity_build_command: mvn clean install
-          # coverity_clean_command: mvn clean
+          #coverity_build_command: 'cmake --build build --config Release'
+          # coverity_clean_command: 'cmake --build build --config Release'
           # coverity_config_path: /Users/Config/coverity.yml
+          coverity_config_path: c:/coverity/coverity.yaml
           # coverity_args: -c /Users/Config/coverity.yml -o capture.build.clean-command="mvn clean" -- mvn clean install
-        
+          #coverity_args: '-o analyze.security=true -o analyze.all=true -o analyze.concurrency=true'
+          
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
         
           ### Coverity Connect users - Uncomment below
@@ -43,13 +56,13 @@ jobs:
           coverity_install_directory: c:/coverity
           
           ### POLICY ENFORCEMENT: Uncomment to break build on policy
-          # coverity_policy_view: 'Outstanding Issues' 
+          coverity_policy_view: 'Outstanding Issues' 
           
           ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true 
           
           ### Mark build status if policy violating issues are found
-          # mark_build_status: 'success'
+          #mark_build_status: 'success'
                       
       ### Uncomment below configuration to add custom logic based on return status
       # - name: cmdLine

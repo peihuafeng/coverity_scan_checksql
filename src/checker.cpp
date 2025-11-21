@@ -22,9 +22,8 @@ namespace sqlcheck {
 
 bool Check(Configuration& state) {
 
-  char* test = new char[10];
-  delete []test;
-  strcpy(test, "aaaa");
+
+
   bool has_issues = false;
   std::unique_ptr<std::istream> input;
 
