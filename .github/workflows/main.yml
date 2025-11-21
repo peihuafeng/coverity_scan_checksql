@@ -1,15 +1,15 @@
 name: CI-Coverity-Basic
 on:
   push:
-    branches: [ main, master, develop, stage, release ]
+    #branches: [ main, master, develop, stage, release ]
+    branches: [ master ]
   pull_request:
-    branches: [ main, master, develop, stage, release ]
-  workflow_dispatch: 
-
-
+    #branches: [ main, master, develop, stage, release ]
+    branches: [ master ]
+  #workflow_dispatch: 
 
 jobs:
-  build:
+  Coverity-Scan:
     runs-on: [ self-hosted ]
     env:
       # 传递给 cov-analyze 的参数
