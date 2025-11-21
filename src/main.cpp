@@ -41,8 +41,6 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
   strcpy(test, "aaaa");
 
 
-
-
   // Default Values
   state.risk_level = sqlcheck::RISK_LEVEL_ALL;
   state.file_name = "";
