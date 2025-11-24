@@ -27,8 +27,8 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
-        with:
-          ref: refs/pull/${{ github.event.issue.number }}/merge
+        #with:
+          #ref: refs/pull/${{ github.event.issue.number }}/merge
           
       - name: Configure CMake
         run: cmake -B build -G "Visual Studio 17 2022" -A x64
