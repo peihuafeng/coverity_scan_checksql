@@ -25,6 +25,15 @@ jobs:
       BRIDGE_COVERITY_ARGS1: "--aggressiveness-level high --security --concurrency --webapp-security"
     
     steps:
+      - run: |
+          echo "===================peihuafeng print param=========================="
+          echo "===================peihuafeng print param=========================="
+          echo "github.event = ${{github.event}}"
+          echo "github.event.action = ${{github.event.action}}"
+          echo "github.repository = ${{github.repository}}"
+          
+          
+
       - name: Checkout Source
         uses: actions/checkout@v4
         #with:
