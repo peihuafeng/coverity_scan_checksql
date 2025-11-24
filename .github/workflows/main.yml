@@ -1,9 +1,7 @@
 name: CI-Coverity-Basic
 on:
-  repository_dispatch:
-    types:
-      - ci-coverity
-      - nightly-build
+  issue_comment:
+    types: [created]
   #push:
     #branches: [ main, master, develop, stage, release ]
     #branches: [ master ]
@@ -14,7 +12,9 @@ on:
 
 jobs:
   Coverity-Scan:
-    if: github.event.action == 'ci-coverity'
+    if: >
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/run-coverity')
     runs-on: [ self-hosted ]
     env:
       # 传递给 cov-analyze 的参数
