@@ -16,6 +16,10 @@ jobs:
       github.event.issue.pull_request &&
       startsWith(github.event.comment.body, '/run-coverity')
     runs-on: [ self-hosted ]
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: write    
     env:
       # 传递给 cov-analyze 的参数
       BRIDGE_COVERITY_ARGS1: "--aggressiveness-level high --security --concurrency --webapp-security"
