@@ -125,6 +125,7 @@ int main(int argc, char **argv) {
 
     gflags::ParseCommandLineFlags(&argc, &argv, true);
 
+    
     // Print help message
     if(FLAGS_h == true){
       FLAGS_h = false;
