@@ -14,7 +14,7 @@ on:
 
 jobs:
   Coverity-Scan:
-    if: githbu.event.action == 'ci-coverity'
+    if: github.event.action == 'ci-coverity'
     runs-on: [ self-hosted ]
     env:
       # 传递给 cov-analyze 的参数
