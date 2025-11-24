@@ -1,15 +1,20 @@
 name: CI-Coverity-Basic
 on:
-  push:
+  repository_dispatch:
+    types:
+      - ci-coverity
+      - nightly-build
+  #push:
     #branches: [ main, master, develop, stage, release ]
-    branches: [ master ]
-  pull_request:
+    #branches: [ master ]
+  #pull_request:
     #branches: [ main, master, develop, stage, release ]
-    branches: [ master ]
+    #branches: [ master ]
   #workflow_dispatch: 
 
 jobs:
   Coverity-Scan:
+    if: githbu.event.action == 'ci-coverity'
     runs-on: [ self-hosted ]
     env:
       # 传递给 cov-analyze 的参数
