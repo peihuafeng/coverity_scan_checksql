@@ -46,7 +46,7 @@ jobs:
     steps:
       - name: Determine whether Coverity scan should run
         id: guard
-        shell: pwsh
+        shell: powershell
         run: |
           $run = $false
           $ref = ""
