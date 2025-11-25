@@ -21,7 +21,7 @@ jobs:
       - name: Add trigger label
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.COVERITY_GITHUB_TOKEN }}
           script: |
             const label = 'ci:coverity';
             const prNumber = context.payload.issue.number;
