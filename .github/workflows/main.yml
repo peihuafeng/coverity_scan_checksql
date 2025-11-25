@@ -1,47 +1,59 @@
-name: CI-Coverity-Basic
+name: Coverity On Comment
+
 on:
-  #issue_comment:
-    #types: [created]
-  push:
-    #branches: [ main, master, develop, stage, release ]
-    branches: [ master ]
+  issue_comment:
+    types: [created]
   pull_request:
-    #branches: [ main, master, develop, stage, release ]
-    branches: [ master ]
-  #workflow_dispatch: 
+    types: [opened, reopened, synchronize, labeled]
 
 jobs:
-  Coverity-Scan:
-    #if: >
-      #github.event.issue.pull_request &&
-      #startsWith(github.event.comment.body, '/run-coverity')
-    runs-on: [ self-hosted ]
-    #permissions:
-      #contents: read
-      #pull-requests: write
-      #actions: write    
-    env:
-      # 传递给 cov-analyze 的参数
-      BRIDGE_COVERITY_ARGS1: "--aggressiveness-level high --security --concurrency --webapp-security"
-    
+  # 1. 监听评论，把指令转换为标签
+  comment_to_label:
+    if: >
+      github.event_name == 'issue_comment' &&
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/run-coverity')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write          # 给 PR 加标签
+      pull-requests: write
     steps:
-      - run: |
-          echo "===================peihuafeng print param=========================="
-          echo "===================peihuafeng print param=========================="
-          echo "github.event = ${{github.event}}"
-          echo "github.event.action = ${{github.event.action}}"
-          echo "github.repository = ${{github.repository}}"
-          
-          
+      - name: Add trigger label
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const label = 'ci:coverity';
+            const prNumber = context.payload.issue.number;
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              labels: [label],
+            });
 
-      - name: Checkout Source
+  # 2. 监听 PR 标签事件，正式执行 Coverity
+  coverity_scan:
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.action == 'labeled' &&
+      github.event.label.name == 'ci:coverity'
+    runs-on: [self-hosted]
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write          # 运行完后移除标签
+    env:
+      BRIDGE_COVERITY_ARGS1: "--aggressiveness-level high --security --concurrency --webapp-security"
+    steps:
+      - name: Checkout PR merge ref
         uses: actions/checkout@v4
-        #with:
-          #ref: refs/pull/${{ github.event.issue.number }}/merge
-          
+        with:
+          ref: refs/pull/${{ github.event.number }}/merge
+
       - name: Configure CMake
         run: cmake -B build -G "Visual Studio 17 2022" -A x64
-        
+
       - name: Coverity Scan
         uses: blackduck-inc/black-duck-security-scan@v2.1.0
         with:
@@ -50,46 +62,12 @@ jobs:
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: project_pr
           coverity_stream_name: stream_pr
-          # coverity_waitForScan: false   # Used to support the async mode
-          
-          ### PULL REQUEST COMMENTS:
           coverity_prComment_enabled: true
-          ## Use the parameter below to add comments for issues filtered 
-          ## by impact. Default is High if unset
-          ## NOTE: Issues matching coverity_policy_view are ignored if set
-          # coverity_prComment_impacts: 'High,Medium,Low,Audit'
-          github_token: ${{ secrets.COVERITY_GITHUB_TOKEN }} # Required when PR comments is enabled
-          
-          ### Arbitrary product-related CL arguments
-          # coverity_build_command: mvn clean install
-          #coverity_build_command: 'cmake --build build --config Release'
-          # coverity_clean_command: 'cmake --build build --config Release'
-          # coverity_config_path: /Users/Config/coverity.yml
+          github_token: ${{ secrets.COVERITY_GITHUB_TOKEN }}
           coverity_config_path: c:/coverity/coverity.yaml
-          # coverity_args: -c /Users/Config/coverity.yml -o capture.build.clean-command="mvn clean" -- mvn clean install
-          #coverity_args: '-o analyze.security=true -o analyze.all=true -o analyze.concurrency=true'
-          
-          # project_directory: ${{ vars.PROJECT_DIRECTORY }}
-        
-          ### Coverity Connect users - Uncomment below
           coverity_local: true
           coverity_install_directory: c:/coverity
-          
-          ### POLICY ENFORCEMENT: Uncomment to break build on policy
-          #coverity_policy_view: 'Outstanding Issues' 
-          
-          ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
-          # include_diagnostics: true 
-          
-          ### Mark build status if policy violating issues are found
-          #mark_build_status: 'success'
-                      
-      ### Uncomment below configuration to add custom logic based on return status
-      # - name: cmdLine
-      #   id: cmdLine
-      #   run: |
-      #     EXIT_CODE=${{ steps.black-duck-security-scan.outputs.status }}
-      #     echo "Black Duck Security Scan exit status - $EXIT_CODE"
+          coverity_policy_view: 'Outstanding Issues'
 
       - name: Save Logs
         if: always()
@@ -98,3 +76,17 @@ jobs:
           name: bridge-logs
           path: ${{ github.workspace }}/.bridge
           include-hidden-files: true
+
+      - name: Remove trigger label
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const label = 'ci:coverity';
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              name: label,
+            });
