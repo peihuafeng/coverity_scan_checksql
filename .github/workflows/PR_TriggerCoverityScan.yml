@@ -1,0 +1,23 @@
+name: CI-Coverity-Basic
+on:
+  push:
+    branches: [ main, master, develop, stage, release ]
+  pull_request:
+    branches: [ main, master, develop, stage, release ]
+  workflow_dispatch: 
+
+
+
+jobs:
+  PR_Trigger_Scan:
+    runs-on: [ self-hosted ]
+    env:
+      # 传递给 cov-analyze 的参数
+      BRIDGE_COVERITY_ARGS1: "--aggressiveness-level high --security --concurrency --webapp-security"
+    
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+        
+      - name: Configure CMake
+        run: cmake -B build -G "Visual Studio 17 2022" -A x64
