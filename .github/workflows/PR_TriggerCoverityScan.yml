@@ -10,7 +10,7 @@ on:
 
 jobs:
   PR_Trigger_Scan:
-    runs-on: [ self-hosted ]
+    runs-on: ubuntu-latest
     env:
       # 传递给 cov-analyze 的参数
       BRIDGE_COVERITY_ARGS1: "--aggressiveness-level high --security --concurrency --webapp-security"
