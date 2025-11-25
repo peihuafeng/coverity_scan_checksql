@@ -46,42 +46,43 @@ jobs:
     steps:
       - name: Determine whether Coverity scan should run
         id: guard
-        shell: bash
+        shell: pwsh
         run: |
-          RUN=false
-          REF=""
+          $run = $false
+          $ref = ""
 
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            if [[ -n "${{ github.event.inputs.pull_number }}" ]]; then
-              RUN=true
-              REF="refs/pull/${{ github.event.inputs.pull_number }}/merge"
-            fi
-          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            if [[ "${{ github.event.action }}" == "labeled" && "${{ github.event.label.name }}" == "ci:coverity" ]]; then
-              RUN=true
-              REF="refs/pull/${{ github.event.pull_request.number }}/merge"
-            fi
-          fi
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            if ('${{ github.event.inputs.pull_number }}' -ne '') {
+              $run = $true
+              $ref = "refs/pull/${{ github.event.inputs.pull_number }}/merge"
+            }
+          }
+          elseif ('${{ github.event_name }}' -eq 'pull_request') {
+            if ('${{ github.event.action }}' -eq 'labeled' -and '${{ github.event.label.name }}' -eq 'ci:coverity') {
+              $run = $true
+              $ref = "refs/pull/${{ github.event.pull_request.number }}/merge"
+            }
+          }
 
-          echo "run=$RUN" >> "$GITHUB_OUTPUT"
-          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          "run=$run" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "ref=$ref" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Skip when scan not requested
-        if: steps.guard.outputs.run != 'true'
+        if: steps.guard.outputs.run != 'True'
         run: echo "Coverity scan was not requested for this event."
 
       - name: Checkout PR merge ref
-        if: steps.guard.outputs.run == 'true'
+        if: steps.guard.outputs.run == 'True'
         uses: actions/checkout@v4
         with:
           ref: ${{ steps.guard.outputs.ref }}
 
       - name: Configure CMake
-        if: steps.guard.outputs.run == 'true'
+        if: steps.guard.outputs.run == 'True'
         run: cmake -B build -G "Visual Studio 17 2022" -A x64
 
       - name: Coverity Scan
-        if: steps.guard.outputs.run == 'true'
+        if: steps.guard.outputs.run == 'True'
         uses: blackduck-inc/black-duck-security-scan@v2.1.0
         with:
           coverity_url: ${{ vars.COVERITY_URL }}
@@ -97,7 +98,7 @@ jobs:
           coverity_policy_view: 'Outstanding Issues'
 
       - name: Save Logs
-        if: steps.guard.outputs.run == 'true'
+        if: steps.guard.outputs.run == 'True'
         uses: actions/upload-artifact@v4
         with:
           name: bridge-logs
@@ -105,7 +106,7 @@ jobs:
           include-hidden-files: true
 
       - name: Remove trigger label
-        if: steps.guard.outputs.run == 'true' && github.event_name == 'pull_request'
+        if: steps.guard.outputs.run == 'True' && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
