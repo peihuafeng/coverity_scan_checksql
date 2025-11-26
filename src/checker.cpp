@@ -86,6 +86,72 @@ bool Check(Configuration& state) {
 
 }
 
+bool Check1(Configuration& state) {
+
+
+
+  bool has_issues = false;
+  std::unique_ptr<std::istream> input;
+
+  // Set up stream
+  if(state.testing_mode == true){
+    input.reset(state.test_stream.release());
+  }
+  else if (state.file_name.empty()) {
+    input.reset(&std::cin);
+  }
+  else {
+    //std::cout << "Checking " << state.file_name << "...\n";
+    input.reset(new std::ifstream(state.file_name.c_str()));
+  }
+
+  std::stringstream sql_statement;
+  state.line_number = 1;
+
+  std::cout << "==================== Results ===================\n";
+
+  // Go over the input stream
+  while(!input->eof()){
+
+    // Get a statement from the input stream
+    std::string statement_fragment;
+    std::getline(*input, statement_fragment, state.delimiter[0]);
+
+    // Append fragment to statement
+    if(statement_fragment.empty() == false){
+      sql_statement << statement_fragment << " ";
+    }
+
+    // Check the statement
+    CheckStatement(state, sql_statement.str());
+
+    // Reset statement
+    sql_statement.str(std::string());
+  }
+
+  // Print summary
+  if(state.checker_stats[RISK_LEVEL_ALL] == 0){
+    std::cout << "No issues found.\n";
+  }
+  else {
+    std::cout << "\n==================== Summary ===================\n";
+    std::cout << "All Anti-Patterns and Hints  :: " << state.checker_stats[RISK_LEVEL_ALL] << "\n";
+    std::cout << ">  High Risk   :: " << state.checker_stats[RISK_LEVEL_HIGH] << "\n";
+    std::cout << ">  Medium Risk :: " << state.checker_stats[RISK_LEVEL_MEDIUM] << "\n";
+    std::cout << ">  Low Risk    :: " << state.checker_stats[RISK_LEVEL_LOW] << "\n";
+    std::cout << ">  Hints       :: " << state.checker_stats[RISK_LEVEL_NONE] << "\n";
+    has_issues = true;
+  }
+
+  // Skip destroying std::cin
+  if (state.file_name.empty()) {
+    input.release();
+  }
+
+  return has_issues;
+
+}
+
 // Wrap the text
 std::string WrapText(const std::string& text){
 

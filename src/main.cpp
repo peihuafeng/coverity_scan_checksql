@@ -107,11 +107,11 @@ void ConfigureChecker(sqlcheck::Configuration &state) {
 
 
 void Usage() {
-    // {
-    //   char* test = new char[10];
-    //   delete []test;
-    //   strcpy(test, "aaaa");
-    // }
+    {
+      char* test = new char[10];
+      delete []test;
+      strcpy(test, "aaaa");
+    }
   std::cout <<
       "Command line options : sqlcheck <options>\n"
       "   -f -file_name          :  SQL file name\n"
@@ -131,11 +131,11 @@ int main(int argc, char **argv) {
 
 
   bool has_issues = false;
-    // {
-    //   char* test = new char[10];
-    //   delete []test;
-    //   strcpy(test, "aaaa");
-    // }
+    {
+      char* test = new char[10];
+      delete []test;
+      strcpy(test, "aaaa");
+    }
   try {
 
     // Parse the input arguments from the user
